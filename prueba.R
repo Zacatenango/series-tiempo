@@ -1,9 +1,10 @@
 print("fgsfds! fgsfds!")
 
 # Pequeña introducción a R
-# Las variables se asignan con una flechita, no con igual
+# Las variables se asignan con una flechita, no con igual. Es una referencia a la flechita de UNIX
 skvrn <- 5
-# Esto nos permite violar las leyes de la sintaxis usual y hacer una asignación al revés
+# Esto nos permite violar las leyes de la sintaxis usual y hacer una asignación al revés. Siguiendo
+# la analogía de la UNIX shell, es como si tirara $ echo "povrch" > prvych.txt
 "povrch" -> prvych
 # Podemos también encadenar múltiples asignaciones
 TRUE -> raer -> tufriqana
@@ -22,6 +23,22 @@ vectorcillo[2:4]
 # Puedo sacar elementos con pruebas lógicas como si fueran PANDAS. Aquí saco números pares y nones
 vectorcillo[(vectorcillo %% 2) == 0]
 vectorcillo[(vectorcillo %% 2) == 1]
+
+# Puedo cargar librerías en cualquier momento
+library(dplyr)
+
+# Con fines demostrativos, voy a generar unos datos al azar
+set.seed(297974)
+datos <- tibble(valor = rnorm(20))
+horizonte <- 5
+
+# El pipe sirve para pasar el resultado de la izquierda al primer parámetro de la func de la derecha
+# Permite escribir expresiones complejas con un estilo de terminal UNIX, poniendo una variable
+# inicial como si fuera el primer proceso que tira a stdout y las funciones como procesos filtro
+datos |> slice_head(n = nrow(datos) - horizonte) -> datos_entrenamiento
+datos |> slice_tail(n = horizonte) -> datos_validacion
+nrow(datos_entrenamiento)
+nrow(datos_validacion)
 
 # Funciones: las asigno a una variable como en Javascript
 # No hay "return" aquí; el retorno es implícito y es el resultado de la última expresión de la func
