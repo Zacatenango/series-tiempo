@@ -12,7 +12,7 @@ TRUE -> raer -> tufriqana
 # Como en MATLAB, en R todo es un vector. Los vectores se hacen con la función c() de "combinar"
 vectorcillo <- c(1,2,3,4)
 # Operar con un vector hace operaciones elemento por elemento como en MATLAB
-vectorcillo_x2 = vectorcillo * 2
+vectorcillo_x2 <- vectorcillo * 2
 # Puedo operar con los vectores
 mean(vectorcillo)
 length(vectorcillo)
