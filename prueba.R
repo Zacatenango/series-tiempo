@@ -29,8 +29,14 @@ library(dplyr)
 
 # Con fines demostrativos, voy a generar unos datos al azar
 set.seed(297974)
-datos <- tibble(valor = rnorm(20))
+datos <- tibble(tiempo = 1:20, valor = rnorm(20))
 horizonte <- 5
+datos
+
+# El operador $ saca una columna de un dataframe/tibble por su nombre (o un elemento con nombre
+# de una lista). Es como acceder a un atributo con obj.atributo en otros lenguajes. En PANDAS,
+# datos$valor es equivalente a datos["valor"].
+datos$valor
 
 # El pipe sirve para pasar el resultado de la izquierda al primer parámetro de la func de la derecha
 # Permite escribir expresiones complejas con un estilo de terminal UNIX, poniendo una variable
@@ -39,6 +45,12 @@ datos |> slice_head(n = nrow(datos) - horizonte) -> datos_entrenamiento
 datos |> slice_tail(n = horizonte) -> datos_validacion
 nrow(datos_entrenamiento)
 nrow(datos_validacion)
+
+# El operador ~ ("tilde") declara una fórmula: una expresión que describe una relación entre
+# variables sin evaluarla de inmediato, algo así como una plantilla. Se lee "y en función de x" y
+# se usa principalmente en funciones de modelado estadístico, como aquí con lm() (regresión lineal)
+modelo <- lm(valor ~ tiempo, data = datos_entrenamiento)
+modelo
 
 # Funciones: las asigno a una variable como en Javascript
 # No hay "return" aquí; el retorno es implícito y es el resultado de la última expresión de la func
