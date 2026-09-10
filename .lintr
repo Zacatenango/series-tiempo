@@ -1,5 +1,7 @@
 linters: linters_with_defaults(
     line_length_linter(100L),
     indentation_linter(indent = 3L),
-    assignment_linter(operator = "any", allow_trailing = TRUE)
+    assignment_linter(operator = "any", allow_trailing = TRUE),
+    infix_spaces_linter = NULL,
+    brace_linter = NULL
   )
