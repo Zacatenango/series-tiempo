@@ -63,3 +63,22 @@ sumar(2,7)
 
 # Los parámetros con nombres son como en Python
 round(x=3.14159265354, digits=2)
+
+# Referencia rápida de Tibble, que se usa hoy en día en vez de los PANDAS
+# El tibble es un DF modernizado y opinionado, rediseñado a partir de la experiencia con PANDAS.
+# Mientras que los dataframes cambian el tipo de los datos entrantes (e.g. convierte strings a
+# factores), el tibble respeta el tipo de datos, no cambia nombres de variables, y no inventa
+# nombres de filas.
+# Puedo convertir rápido y sencillo un dataframe a tibble
+iris |> as_tibble() -> tibble_iris
+# Puedo crear un tibble a partir de una función matemática
+# Nota: aquí no funcionan los paréntesis BSD de Javascript, tienen que ser egipcios sí o sí, similar
+# al `return {` de Javascript, ya que `audio <- tibble` es R válido (asignar el handle de la 
+# librería tibble a una variable llamada audio) y por lo tanto lo que sigue deja de ser válido por
+# no estar operando sobre una función
+audio <- tibble(
+   T = seq(from=0, to=1, by=1/44100),
+   y = sin(2*3.141592*500*T)
+)
+
+# Los tsibbles son tibbles especiales que tienen registro de cuál es la 

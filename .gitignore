@@ -1,0 +1,13 @@
+# Credenciales: la API key de FRED vive aqui, nunca en el repositorio
+.Renviron
+
+# Salidas de Quarto / knitr
+/*_files/
+/*_cache/
+/.quarto/
+
+# Residuo del dispositivo grafico de Rscript
+Rplots.pdf
+
+# No meter nada vibe-coded; esto es el Curso de Series de Tiempo, no una startup de Hyderabad
+*vibecoded*
