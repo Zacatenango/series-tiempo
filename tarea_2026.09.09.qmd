@@ -1,0 +1,17 @@
+---
+title: "Ejercicio de pronóstico"
+subtitle: "Importaciones en EEUU de carros mexicanos"
+author: "Acoyani Garrido Sandoval"
+date: today
+lang: es
+format:
+   html:
+      embed-resources: true
+---
+
+# Planteamiento
+
+El enunciado de esta tarea consiste en hacer un pronóstico a 14 meses de importaciones de vehículos desde México hacia EEUU, usando el flujo de pronóstico completo establecido en <<https://pbenavidesh.github.io/narsil/docs/modules/module_1/03_fcst/forecasting.html#a-tidy-forecasting-workflow>>:
+
+1. **Visualizar** los datos para identificar patrones en ellos.
+2. **Especificar y estimar**.
