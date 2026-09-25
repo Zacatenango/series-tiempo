@@ -88,3 +88,31 @@ Si quiero introducir una columna calculada, uso `mutate(<nueva columna>=<columna
 2 Feb       12
 3 Mar        9
 ```
+
+## tsibble
+
+tsibble es una librería que maneja tibbles especializados en series de tiempo. Lo que le añade a los tibbles es una columna _index_ que cuenta el tiempo, y columnas _key_ que identifican a qué serie pertenece cada fila, de tal forma que una tabla puede tener múltiples series.
+
+El paquete de librerías fpp3 incluye un dataset bajo la variable global `aus_retail`, que es internamente un tsibble:
+
+```R
+> aus_retail
+# A tsibble: 64,532 x 5 [1M]
+# Key:       State, Industry [152]
+   State                        Industry                                 `Series ID`    Month Turnover
+   <chr>                        <chr>                                    <chr>          <mth>    <dbl>
+ 1 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Apr      4.4
+ 2 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 May      3.4
+ 3 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Jun      3.6
+ 4 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Jul      4  
+ 5 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Aug      3.6
+ 6 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Sep      4.2
+ 7 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Oct      4.8
+ 8 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Nov      5.4
+ 9 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1982 Dec      6.9
+10 Australian Capital Territory Cafes, restaurants and catering services A3349849A   1983 Jan      3.8
+# ℹ 64,522 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+Cuando mostramos un tsibble, podemos ver cómo el encabezado nos dice el intervalo entre registros de nuestra serie de tiempo ([1M] = 1 mes), así como la cantidad de series distintas que se pueden sacar de la tabla ([152]).
