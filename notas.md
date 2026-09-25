@@ -26,7 +26,7 @@ El resultado es:
 3 Mar        9
 ```
 
-Para sacar como vector una columna del tibble/DF, uso el signo de pesos:
+Para sacar como vector una columna del tibble/DF, uso el signo de pesos. A diferencia de la mayoría de los lenguajes de programación, donde hay que entrecomillar el nombre de la columna, aquí no se hace eso. Esto aparece después en los parámetros de funciones sin comillas.
 
 ```R
 > DF$ventas
@@ -116,3 +116,30 @@ El paquete de librerías fpp3 incluye un dataset bajo la variable global `aus_re
 ```
 
 Cuando mostramos un tsibble, podemos ver cómo el encabezado nos dice el intervalo entre registros de nuestra serie de tiempo ([1M] = 1 mes), así como la cantidad de series distintas que se pueden sacar de la tabla ([152]).
+
+## autoplot y gg_season
+
+`autoplot()` sirve para graficar fácil y sencillo una columna de un tsibble.
+
+**Nota:** aquí el parámetro no va entre comillas, porque el parámetro es una columna de dataframe; autoplot() tirará una línea horizontal "vacía" si aquí paso `autoplot("Turnover")`, porque interpretará el nombre entre comillas como "graficar la constante literal "Turnover""; si paso `autoplot(Turnover)`, ahí sí lo interpreta como "graficar la columna Turnover". Esto nos lleva al escenario: **¿qué pasa si el nombre tiene espacios?** Se encierra entre \`acentos graves\`.
+
+- La regla de dedo es que, si un parámetro es un valor simple que escribiría en una celda, va entre comillas; si un parámetro es un vector o columna, no lleva comillas.
+- Esto es posible, porque R evalúa los parámetros con flojera; es decir, la función recibe la expresión sin evaluar y puede decidir de dónde sacar su significado.
+
+```R
+mi_serie |> autoplot(Turnover)
+```
+
+![alt text](notas1.png)
+
+Esto me muestra automáticamente la serie con el eje de tiempo integrado al tsibble.
+
+`gg_season()` es una función que sirve para explorar estacionalidad de forma visual. Igual que autoplot(), le paso la columna que quiero explorar:
+
+```R
+mi_serie |> gg_season(Turnover)
+```
+
+![alt text](notas2.png)
+
+Con esto confirmo que mi serie efectivamente tiene un pico en Diciembre. Veo también un piquito en Junio, que en Australia es el fin del año fiscal australiano, por lo tanto el último mes para comprar cosas deducibles de impuestos y el último mes para vender todo y así los negocios muestren mejores números.
