@@ -205,3 +205,18 @@ Para no tener que andar eligiendo la lambda a ojo de buen cubero, el **método d
   <chr>           <chr>                               <dbl>
 1 New South Wales Household goods retailing           0.409
 ```
+
+Entonces, si meto esta lambda óptima a una transformación Box-Cox, debería poder ver que esta lambda hace que las fluctuaciones de mi serie sean lo más óptimas posible. 
+
+- La función `pull(<columna sin comillas>)` es un sinónimo del operador $ más apto para pipelines.
+- La función `paste()` es como se concatenan números a strings en R
+
+```R
+> mi_serie |> features(Turnover, features=guerrero) |> pull(lambda_guerrero) -> lambda_optima
+> mi_serie |> autoplot(box_cox(Turnover, lambda_optima))
+```
+
+![alt text](notas1.png)
+![alt text](notas5.png)
+
+Podemos ver en esta gráfica cómo la segunda serie de tiempo tiene un crecimiento mucho más lineal y unos picos mucho más regulares, ¿por qué? porque con Box-Cox "estabilizamos" el crecimiento y la varianza de la serie, y tenemos mucha confianza de que este es el valor óptimo de lambda porque la sacamos con método de Guerrero.
