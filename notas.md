@@ -220,3 +220,39 @@ Entonces, si meto esta lambda óptima a una transformación Box-Cox, debería po
 ![alt text](notas5.png)
 
 Podemos ver en esta gráfica cómo la segunda serie de tiempo tiene un crecimiento mucho más lineal y unos picos mucho más regulares, ¿por qué? porque con Box-Cox "estabilizamos" el crecimiento y la varianza de la serie, y tenemos mucha confianza de que este es el valor óptimo de lambda porque la sacamos con método de Guerrero.
+
+## STL
+
+La función `STL()` hace el cálculo de sacar la tendencia, estacionalidad y residuo de la serie. STL() siempre lo hace de forma aditiva; por lo que si nuestra serie es multiplicativa, primero hay que transformarla.
+
+```R
+> mi_serie |> model(STL(box_cox(Turnover, lambda_optima))) |> components() |> autoplot()
+```
+
+donde:
+
+- `model()` es del paquete _fable_ y sirve para entrenar los modelos especificados a partir del segundo parámetro (primer parámetro en pipes), y
+- `components()` extrae los resultados de model() como tabla.
+
+![alt text](notas6.png)
+
+De esa forma, obtenemos en una sola gráfica, de arriba hacia abajo, la serie que recibió STL(), la tendencia, la estacionalidad, y el residuo. El cuadro gris mostrado en esa gráfica es para mostrar escala y corrimiento en los ejes: abarca en todas las gráficas la altura del eje más chaparro. Podemos ver que el residuo es el eje más chaparro de todos, y eso es por definición: se supone que la tendencia y la estacionalidad deben explicar lo más posible la serie de tiempo.
+
+### El pico del 2000
+
+Digamos que nuestro análisis de datos es aplicado, y estamos haciéndolo por _algún motivo en particular_ (e.g. soy asesor parlamentario del Congreso y estoy explorando datos para hacer con ellos una iniciativa de reforma). Al calcular el STL de mi serie, descubro que hay un picote enorme en los residuos.
+
+Cuando hay un patrón o característica que aparece en los residuos, esto quiere decir que _ocurrió algo que no puede explicarse como resultado natural de la tendencia ni de la estacionalidad._ Entonces, esto es motivo para saber en qué fecha ocurrió ese picote.
+
+```R
+> mi_serie |> model(STL(box_cox(Turnover, lambda_optima))) |> components() |> filter(remainder > 2)
+# A dable: 1 x 9 [1M]
+# Key:     State, Industry, .model [1]
+# :        box_cox(Turnover, lambda_optima) = trend + season_year + remainder
+  State           Industry                .model    Month box_cox(Turnover, la…¹ trend season_year remainder season_adjust
+  <chr>           <chr>                   <chr>     <mth>                  <dbl> <dbl>       <dbl>     <dbl>         <dbl>
+1 New South Wales Household goods retail… STL(b… 2000 Jun                   33.9  31.5       0.103      2.36          33.8
+# ℹ abbreviated name: ¹​`box_cox(Turnover, lambda_optima)`
+```
+
+Veo que eso sucedió en Junio de 2000, que es el cierre del año fiscal en Australia. Entonces, ¿qué ocurrió que hizo que el pico de Junio de 2000 fuera notoriamente más grande que en otros años? Esto me da una pauta para encontrar que, [según la Tesorería de la Mancomunidad de Australia](https://www.accc.gov.au/system/files/120%20Hon%20P%20Costello%20continuing%20tax%20reform%205-06.pdf), en el año fiscal 2000-2001 entró en vigor el New Tax System, una reforma fiscal mayor que cambió muchos impuestos; cuáles exactamente, eso está fuera del alcance de la práctica, pero sabemos que un gran cambio en las disposiciones fiscales pudiera haber motivado un pico extra pronunciado de compras en el cierre del ejercicio 1999-2000.
