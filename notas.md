@@ -117,7 +117,7 @@ El paquete de librerías fpp3 incluye un dataset bajo la variable global `aus_re
 
 Cuando mostramos un tsibble, podemos ver cómo el encabezado nos dice el intervalo entre registros de nuestra serie de tiempo ([1M] = 1 mes), así como la cantidad de series distintas que se pueden sacar de la tabla ([152]).
 
-## autoplot y gg_season
+## autoplot, gg_subseries y gg_season
 
 `autoplot()` sirve para graficar fácil y sencillo una columna de un tsibble.
 
@@ -134,6 +134,14 @@ mi_serie |> autoplot(Turnover)
 
 Esto me muestra automáticamente la serie con el eje de tiempo integrado al tsibble.
 
+`gg_subseries()` es una función para series de tiempo que grafica cada intervalo por periodo superior en un eje diferente, e.g. el valor que tiene cada mes en diferentes años.
+
+```R
+mi_serie |> gg_subseries(Turnover)
+```
+
+![alt text](notas3.png)
+
 `gg_season()` es una función que sirve para explorar estacionalidad de forma visual. Igual que autoplot(), le paso la columna que quiero explorar:
 
 ```R
@@ -143,3 +151,29 @@ mi_serie |> gg_season(Turnover)
 ![alt text](notas2.png)
 
 Con esto confirmo que mi serie efectivamente tiene un pico en Diciembre. Veo también un piquito en Junio, que en Australia es el fin del año fiscal australiano, por lo tanto el último mes para comprar cosas deducibles de impuestos y el último mes para vender todo y así los negocios muestren mejores números.
+
+## Autocorrelación
+
+Si el eje y en el tiempo T en la función de convolución es el área de intersección de una función con otra función volteada que está recorrida un tiempo T, y el eje y en el tiempo T de la correlación cruzada es lo mismo pero con la otra función sin voltear, entonces la autocorrelación es la correlación cruzada de la función con sí misma. 
+
+Puesto de otra forma, la autocorrelación es la convolución de la función con una copia volteada de sí misma.
+
+La autocorrelación se saca con `ACF(<columna>, lag_max=<retraso máximo>)` y se grafica con `autoplot()`.
+
+La función de autocorrelación da varias piezas de información valiosa sobre nuestra serie de tiempo:
+
+- Si la función de autocorrelación decae lentamente, quiere decir que la serie tiene tendencia.
+- Si la función de autocorrelación decae rápidamente o es muy pequeña, entonces la función es equivalente al ruido blanco.
+- La función de autocorrelación evidencía los picos estacionales: es más fácil verlos en esa función.
+
+```R
+mi_serie |> ACF(Turnover, lag_max=48) |> autoplot()
+```
+
+![alt text](notas4.png)
+
+## Homo/heteroesquedasticidad
+
+La **heteroesquedasticidad** (del griego _hetero_, "diferente", y _skedannymi_, "dispersión") quiere decir que la varianza de la serie de tiempo es variable; es decir, los datos se dispersan más o menos a medida que avanza el tiempo de la serie.
+
+La serie que estamos viendo en este ejemplo es **heteroesquedástica**, ya que podemos ver cómo los picos estacionales del mes de Diciembre son cada vez más pronunciados a medida que avanza el tiempo.
