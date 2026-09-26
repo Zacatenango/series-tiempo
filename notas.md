@@ -177,3 +177,31 @@ mi_serie |> ACF(Turnover, lag_max=48) |> autoplot()
 La **heteroesquedasticidad** (del griego _hetero_, "diferente", y _skedannymi_, "dispersión") quiere decir que la varianza de la serie de tiempo es variable; es decir, los datos se dispersan más o menos a medida que avanza el tiempo de la serie.
 
 La serie que estamos viendo en este ejemplo es **heteroesquedástica**, ya que podemos ver cómo los picos estacionales del mes de Diciembre son cada vez más pronunciados a medida que avanza el tiempo.
+
+## Estacionalidad aditiva o multiplicativa y transformación de Box-Cox
+
+Hay 2 formas de estacionalidad:
+
+- **Aditiva:** Serie = tendencia + estacionalidad + ruido
+- **Multiplicativa:** Serie = tendencia(estacionalidad)ruido
+
+Podemos saber si la estacionalidad es aditiva o multiplicativa sacando la variación entre el máximo y mínimo estacional en escala lineal y en escala logarítmica. Si es igual en escala lineal, es aditiva. Si es igual en escala logarítmica, es multiplicativa, ya que en una serie multiplicativa, Ln(serie) = Ln(tendencia) + Ln(estacionalidad) + Ln(ruido).
+
+El logaritmo tiene la ventaja de linealizar la estacionalidad multiplicativa; sin embargo, en la vida real no todas las series tienen una estacionalidad perfectamente lineal o perfectamente multiplicativa. Para ello, existe una fórmula que es la **transformación de Box-Cox**:
+
+```math
+w = \ln(y), \lambda = 0 \\
+w = \frac{y^\lambda - 1}{\lambda}, \lambda \ne 0
+```
+
+Esto nos permite elegir escalas "intermedias" entre la lineal y la logarítmica. Cuando $\lambda$ es 1, la fórmula colapsa a $w = y - 1$: nuestros valores se corren una unidad hacia abajo, pero su geometría no se altera. Cuando $\lambda$ es 0.5, la y se eleva a 1/2, lo que pasa a ser una raíz cuadrada. Y cuando la $\lambda$ es 0, tenemos un logaritmo.
+
+Para no tener que andar eligiendo la lambda a ojo de buen cubero, el **método de Víctor M. Guerrero** nos permite encontrar la lambda que minimiza el coeficiente de variación entre las subseries de nuestra serie; es decir, la que hace que las fluctuaciones sean lo más uniformes posible.
+
+```R
+> mi_serie |> features(Turnover, features=guerrero)
+# A tibble: 1 × 3
+  State           Industry                  lambda_guerrero
+  <chr>           <chr>                               <dbl>
+1 New South Wales Household goods retailing           0.409
+```
