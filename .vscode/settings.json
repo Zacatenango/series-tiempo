@@ -1,4 +1,5 @@
 {
     "terminal.integrated.fontSize": 11,
-    "console.fontSize": 11
+    "console.fontSize": 11,
+    "markdown.preview.fontSize": 13
 }
