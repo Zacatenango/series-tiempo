@@ -55,3 +55,7 @@ Pero el intervalo es en términos de desviación estándar, así que la desviaci
 Y el intervalo de 95% es $\pm1.96\hat{\sigma}$, es decir, [60.8, 139.2].
 
 Estos valores son el doble del intervalo en $h=1$. ¿Quiere decir que la amplitud del intervalo crece en proporción a la raíz cuadrada de la predicción?
+
+## Métricas de accuracy
+
+
